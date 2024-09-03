@@ -1,0 +1,38 @@
+{
+  "name": "issue-tracker",
+  "version": "1.0.0",
+  "description": "Coding Ninjas Backend Skill-test Project",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alqamah/issue-tracker.git"
+  },
+  "keywords": [
+    "express.js",
+    "node.js",
+    "mongodb",
+    "javascript",
+    "html",
+    "css",
+    "bootstrap"
+  ],
+  "author": "alqama hasnain",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/alqamah/issue-tracker/issues"
+  },
+  "homepage": "https://github.com/alqamah/issue-tracker#readme",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
+    "express": "^4.19.2",
+    "express-ejs-layouts": "^2.5.1",
+    "mongodb": "^6.5.0",
+    "mongoose": "^8.3.2"
+  }
+}

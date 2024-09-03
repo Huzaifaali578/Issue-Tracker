@@ -1,0 +1,308 @@
+<style>
+    h1{
+      font-variant: small-caps;
+      font-size: 30px;
+
+    }
+    h6{
+        margin: 0 10px;
+        color: rgba(255, 255, 255, 0.585);
+    }
+    header{
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      position: relative;
+      padding: 10px;
+    }
+    #h-date h1{
+      font-size: 25px;
+      margin-left: 10px;
+    }
+    #h-author{
+      display: flex;
+    }
+    #h-name{
+      display: flex;
+    }
+    #h-description{
+      margin: 10px 0 10px 10px;
+      padding: 10px;
+    }
+    #h-description h4{
+      width: 100%;
+      color: rgba(255, 255, 255, 0.585);
+    }
+
+    .list-group{
+      background-color: #313131;
+      padding: 5px;
+      color: aliceblue;
+    }
+    .list-group-item{
+      display: flex;
+      align-items: center;
+      justify-content: left;
+      background-color: #000000;
+      color: aliceblue;
+      border: 1px solid #313131;
+      font-size: 1.2rem;
+      font-family: 'Courier New', Courier, monospace;
+      cursor: pointer;
+      width: 100%;
+
+    }
+    /* #h{
+      border: 1px solid rgba(255, 255, 255, 0.585);
+      border-radius: 10px;
+      margin: 20px 0;
+      padding: 10px;
+    } */
+    .issue-item{
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    background-color: #000000;
+    color: aliceblue;
+    border: 1px solid #313131;
+    font-size: 1.2rem;
+    font-family: 'Courier New', Courier, monospace;
+    cursor: pointer;
+    }
+    .list-group-item:hover{
+    background-color: white;
+    color: black;
+    border: 1px solid #313131;
+    }
+    .list-group-item:hover desc{
+      color: black;
+    }
+    .list-group-item:hover label{
+      background-color: rgba(0, 255, 255, 0.354);
+      color: #170631;
+    }
+    .list-group-item desc{
+      margin-right: 5px;
+      color: #c1c1c1;
+    }
+    .list-group-item p{
+      margin: 0 20px;
+      font-size: 1.5rem;
+      font-variant-caps: titling-caps;  
+    }
+    .list-group-item issue-status{
+      margin: 0 20px 0 auto; 
+    }
+    .list-group-item label{
+      margin-left: auto;
+      margin-right: auto;
+      padding: 5px 10px; 
+      background-color: rgb(27, 18, 28);
+      border-radius: 5px;
+      color: rgb(240, 197, 197);
+    }
+    .modal-content{
+      background-color: #000000;
+      border: 5px solid rgb(59, 59, 59);
+      border-radius: 20px;
+      color: aliceblue;
+    }
+    .form-group{
+      background-color: rgb(37, 37, 37);
+      padding: 2%;
+      border-radius: 5px;
+    }
+
+    .issue-actions {
+      margin-left: auto;
+      padding: 0 10px;
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .delete-project,
+    .edit-project {
+      font-size: 1rem;
+      padding: 0.25rem 0.5rem;
+    }
+
+    .modal-submit{
+      background-color: #474747;
+      color: white;
+    }
+    .modal-submit:hover{
+      background-color: white;
+      color: #007523;
+    }
+    .modal-cancel{
+      background-color: #474747;
+      color: white;
+    }
+
+  
+    .close{
+      color: white;
+    }
+    .close:hover{
+      color: white;
+    }
+
+ 
+  
+  
+  </style>
+  
+  
+  <div class="container my-4 ">
+    <div id="h">
+    <header>
+      <div id="h-date"><h6>DATE OF CREATION</h6><h1 class="mb-4 project-date"><%= project.date %>&nbsp;</h1></div>
+      <div id="h-author"><h6>PROJECT AUTHOR</h6><h1 class="mb-4"><%= project.author %>&nbsp;</h1></div>
+      <div id="h-name"><h6>PROJECT NAME</h6><h1 class="mb-4"><%= project.name %></h1><h1 class="mb-4 anim-blink">_</h1></div>
+    </header>
+    <div id="h-description">
+      <h4>PROJECT DESCRIPTION</h4>
+      <p><%= project.description %></p>
+    </div>
+    
+    </div>
+    <button type="button" class="btn btn-outline-light mb-3" data-toggle="modal" onclick="location.href='/'">
+      Back
+    </button>
+    <button type="button" class="btn btn-outline-light mb-3" data-toggle="modal" data-target="#createIssueModal">
+      Create New Issue
+    </button>
+    
+    <% if ((issues.length === 0) || (!issues)) { %>
+      <p>No Issues found.</p>
+    <% } else { %>
+      <ul class="list-group">
+        <% issues.forEach(issue => { %>
+          <li class="issue-item">
+            <div class="list-group-item" data-issue-id="<%= issue._id %>">
+              <desc><%= issue.timestamp %></desc>
+              <p><%= issue.title %></p>
+              <desc>by <b><%= issue.author %></b></desc>
+              <label><%= issue.label %></label>
+              <issue-status>status : <b><%= issue.status %></b></issue-status>          
+            </div>
+            <!-- <div class="issue-actions">
+              <button class="btn btn-sm btn-danger delete-project" data-project-id="<%= project._id %>" title="Delete Project">
+                <i class="fas fa-trash-alt"></i>
+              </button>
+              <button class="btn btn-sm btn-primary edit-project" data-project-id="<%= project._id %>" title="Edit Project">
+                <i class="fas fa-edit"></i>
+              </button>
+            </div> -->
+          </li>
+        <% }) %>
+      </ul>
+    <% } %>
+  </div>
+  
+  <!-- Create Issue Modal -->
+  <div class="modal fade" id="createIssueModal" tabindex="-1" role="dialog" aria-labelledby="createIssueModalLabel" aria-hidden="true" data-project-id="<%= project._id %>">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="createIssueModalLabel">Create New Issue</h5>
+          <button type="button" class="close close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form id="createIssueForm">
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="issueName">Issue Name</label>
+              <input type="text" class="form-control" id="issueName" name="issueName" placeholder="Enter issue name" required>
+            </div>
+            <div class="form-group">
+              <label for="issueDescription">Issue Description</label>
+              <textarea class="form-control" id="issueDescription" name="issueDescription" rows="3" placeholder="Enter issue description"></textarea>
+            </div>
+            <div class="form-group">
+              <label for="issueAuthor">Issue Creator</label>
+              <input type="text" class="form-control" id="issueAuthor" name="issueAuthor" placeholder="Enter issue author" required>
+            </div>
+          </div>
+          <div class="form-group m-3 d-flex justify-content-center">
+            <label for="issueLabel">Issue Label</label>
+            <select class="form-control" id="issueLabel" name="issueLabel">
+                <option value="">Select a label</option>
+                <option value="bug">Bug</option>
+                <option value="enhancement">Enhancement</option>
+                <option value="task">Task</option>
+                <option value="documentation">Documentation</option>
+                <option value="help-wanted">Help Wanted</option>
+                <!-- Add more options as needed -->
+            </select>
+        </div>
+          <div class="modal-footer">
+            <button type="button" class="btn modal-cancel" data-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn modal-submit">Create Issue</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+
+<!--script to handle new issue-modal and sending req to BE -->
+  <script>
+    //new issue modal and response:
+    const projectId= $('#createIssueModal').data('project-id')
+    //create Issue
+    $(document).ready(function() {
+      // Show the modal when the "Create New Project" button is clicked
+      $('button[data-target="#createIssueModal"]').click(function() {
+        $('#createIssueModal').modal('show');
+      });
+  
+      // Handle form submission when the "Create Project" button is clicked
+      $('#createIssueForm').submit(function(e) {
+        e.preventDefault(); // Prevent the default form submission
+        const formData = {
+          issueName: $('#issueName').val(),
+          issueDescription: $('#issueDescription').val(),
+          issueAuthor: $('#issueAuthor').val(),
+          issueLabel : $('#issueLabel').val(),
+          projectId: projectId
+        }; 
+        sendResponse(formData);
+        window.location.href = '/project/'+projectId;
+
+      });
+    });
+  
+    async function sendResponse(data){
+      console.log("sending response");
+      const url = '/project/'+projectId;
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
+      console.log(data);
+    }
+  
+  </script>
+
+<!--script to handle open-issue-->
+<script>
+  $(document).ready(function() {
+    // Add click event listener to project list items
+    $('.list-group-item').click(function() {
+      const issueId = $(this).data('issue-id');
+      window.location.href = `/issue/${issueId}`;
+    });
+  });
+</script>
+
+  
