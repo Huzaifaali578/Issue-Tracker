@@ -5,7 +5,7 @@ Coding Ninjas Backend Skill-test Project to build an Issue Tracker Wesite.
 https://docs.google.com/document/d/1iJ8MSBHSc0MCmSafSVyOo_gEPd395GWxqw9eZYTAAlA/edit
 
 ## Live Link
-https://issue-tracker-ejj0.onrender.com
+https://issue-tracker-dzs5.onrender.com
 
 ## Youtube Link (project demo)
 https://youtu.be/T7Xuufle96E
