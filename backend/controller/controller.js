@@ -52,17 +52,22 @@ export class ProjectController {
     }
 
     async openProject(req, res) {
-        try{
-            const {id} = req.params;
-            //console.log("id:",id);
-            const project = await this.project.findById(id);
-            let issues = await this.issue.find({project: id});
-            res.render('project.ejs',{issues,project});
-        }catch(error){
+        try {
+            const { id } = req.params;
+            const project = await this.project.findById(id).populate('issues');
+            
+            if (!project) {
+                return res.status(404).json({ message: "Project not found" });
+            }
+    
+            // Respond with project details in JSON
+            res.json(project);
+        } catch (error) {
             console.log(error);
             res.status(500).json({ message: error.message });
         }
     }
+    
 
     async createIssue(req, res) {
         try{
@@ -139,5 +144,28 @@ export class ProjectController {
           const formattedDate = `${day}/${month}/${year}`;
           return formattedDate;
         }
-      }
+    }
+    
+    async updateProject(req, res) {
+        try {
+            const { id } = req.params;
+            const { name, description, author } = req.body;
+    
+            // Update the project in the database
+            const project = await Project.findByIdAndUpdate(id, {
+                name,
+                description,
+                author
+            }, { new: true });
+    
+            if (!project) {
+                return res.status(404).json({ message: "Project not found" });
+            }
+    
+            res.json({ message: "Project updated successfully", project });
+        } catch (error) {
+            console.error("Error updating project:", error);
+            res.status(500).json({ message: "Server error while updating project" });
+        }
+    }
 }

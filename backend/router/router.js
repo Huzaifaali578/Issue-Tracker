@@ -41,5 +41,9 @@ router.delete('/issue/:id', (req, res) => {
     projectController.deleteIssue(req, res);
 });
 
+router.put('/project/:id', (req, res) => {
+    projectController.updateProject(req, res);
+});
+
 
 export default router;
