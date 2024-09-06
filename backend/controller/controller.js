@@ -1,5 +1,5 @@
-import {Project} from "../model/model.js";
-import {Issue} from "../model/model.js";
+import { Project } from "../model/model.js";
+import { Issue } from "../model/model.js";
 
 export class ProjectController {
 
@@ -9,9 +9,9 @@ export class ProjectController {
     }
 
     async getProjects(req, res) {
-        try{
+        try {
             const projects = await this.project.find({});
-            res.render('index.ejs', {projects});
+            res.render('index.ejs', { projects });
         } catch (error) {
             console.log(error);
             res.status(500).json({ message: error.message });
@@ -24,23 +24,23 @@ export class ProjectController {
             const description = req.body.projectDescription;
             const author = req.body.projectAuthor;
             const date = this.formatDate(new Date());
-            const project = new this.project({name, description, author, date});
+            const project = new this.project({ name, description, author, date });
             const result = await project.save();
             //console.log(result);
             res.status(201).send('Project created successfully');
         } catch (error) {
             console.log(error);
             res.status(500).json({ message: error.message });
-        
-        }    
+
+        }
     }
 
     async deleteProject(req, res) {
         try {
-            const {id} = req.params;
+            const { id } = req.params;
             const project = await this.project.findByIdAndDelete(id);
             //delete issues corresponding to the same project id
-            const issues = await this.issue.find({project: id});
+            const issues = await this.issue.find({ project: id });
             for (let issue of issues) {
                 await this.issue.findByIdAndDelete(issue._id);
             }
@@ -54,23 +54,19 @@ export class ProjectController {
     async openProject(req, res) {
         try {
             const { id } = req.params;
-            const project = await this.project.findById(id).populate('issues');
-            
-            if (!project) {
-                return res.status(404).json({ message: "Project not found" });
-            }
-    
-            // Respond with project details in JSON
-            res.json(project);
+            const project = await this.project.findById(id);
+            let issues = await this.issue.find({ project: id });
+            res.render('project.ejs', { issues, project });
         } catch (error) {
             console.log(error);
             res.status(500).json({ message: error.message });
         }
     }
-    
+
+
 
     async createIssue(req, res) {
-        try{
+        try {
             console.log("new issue controller");
             const id = req.body.projectId;
             const title = req.body.issueName;
@@ -80,14 +76,14 @@ export class ProjectController {
             const timestamp = this.formatDate(new Date());
             const project = await this.project.findById(id);
             const label = req.body.issueLabel;
-            //console.log("Issue:",title, description, status, author, timestamp, project);
-            const issue = new this.issue({title, description, label, status, author, timestamp, project});
+            // console.log("Issue:",title, description, status, author, timestamp, project);
+            const issue = new this.issue({ title, description, label, status, author, timestamp, project });
             const result = await issue.save();
             project.issues.push(issue.id);
             await project.save();
             //console.log("project:",project);
             //res.status(201).redirect('/project/'+id);
-        }catch(error){
+        } catch (error) {
             console.log(error);
             res.status(500).json({ message: error.message });
         }
@@ -95,40 +91,40 @@ export class ProjectController {
     }
 
     async closeIssue(req, res) {
-        try{
-            const {id} = req.params;
+        try {
+            const { id } = req.params;
             const issue = await this.issue.findById(id);
             issue.status = "Closed";
             await issue.save();
-            res.status(200).redirect('/project/'+issue.project);
-        }catch(error){
+            res.status(200).redirect('/project/' + issue.project);
+        } catch (error) {
             console.log(error);
             res.status(500).json({ message: error.message });
         }
-    } 
+    }
 
     async deleteIssue(req, res) {
-        try{
-            const {id} = req.params;
+        try {
+            const { id } = req.params;
             const issue = await this.issue.findByIdAndDelete(id);
             const project = await this.project.findById(issue.project);
             project.issues.pull(issue.id);
             await project.save();
             res.status(200).redirect('/');
-        }catch(error){
+        } catch (error) {
             console.log(error);
             res.status(500).json({ message: error.message });
         }
-    } 
+    }
 
-    async openIssue(req, res){
-        try{
-            const {id} = req.params;
+    async openIssue(req, res) {
+        try {
+            const { id } = req.params;
             //console.log("id:",id);
             const issue = await this.issue.findById(id);
             const project = await this.project.findById(issue.project);
-            res.render('issue.ejs',{issue, project});
-        }catch(err){
+            res.render('issue.ejs', { issue, project });
+        } catch (err) {
             console.log(err);
             res.status(500).send(err.message);
         }
@@ -138,34 +134,52 @@ export class ProjectController {
     formatDate(date) {
         //console.log("date:", date);
         if (date) {
-          const day = String(date.getDate()).padStart(2, '0');
-          const month = String(date.getMonth() + 1).padStart(2, '0');
-          const year = date.getFullYear();
-          const formattedDate = `${day}/${month}/${year}`;
-          return formattedDate;
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const year = date.getFullYear();
+            const formattedDate = `${day}/${month}/${year}`;
+            return formattedDate;
         }
     }
-    
+
     async updateProject(req, res) {
         try {
             const { id } = req.params;
             const { name, description, author } = req.body;
-    
+
             // Update the project in the database
             const project = await Project.findByIdAndUpdate(id, {
                 name,
                 description,
                 author
             }, { new: true });
-    
+
             if (!project) {
                 return res.status(404).json({ message: "Project not found" });
             }
-    
+
             res.json({ message: "Project updated successfully", project });
         } catch (error) {
             console.error("Error updating project:", error);
             res.status(500).json({ message: "Server error while updating project" });
         }
+        
     }
+
+    async openUpdateProject(req, res) {
+    try {
+        const { id } = req.params;
+        const project = await this.project.findById(id).populate('issues');
+
+        if (!project) {
+            return res.status(404).json({ message: "Project not found" });
+        }
+
+        // Respond with project details in JSON
+        res.json(project);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: error.message });
+    }
+}
 }

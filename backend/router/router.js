@@ -41,8 +41,12 @@ router.delete('/issue/:id', (req, res) => {
     projectController.deleteIssue(req, res);
 });
 
-router.put('/project/:id', (req, res) => {
+router.put('/project/:id/edit', (req, res) => {
     projectController.updateProject(req, res);
+});
+
+router.get('/project/:id/edit', (req, res) => {
+    projectController.openUpdateProject(req, res);
 });
 
 
