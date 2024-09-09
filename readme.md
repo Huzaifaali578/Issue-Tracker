@@ -8,6 +8,7 @@ https://docs.google.com/document/d/1iJ8MSBHSc0MCmSafSVyOo_gEPd395GWxqw9eZYTAAlA/
 https://issue-tracker-cw44.onrender.com
 
 ## Youtube Link (project demo)
+https://youtu.be/xtCKzn6JoSU?si=GLI5j0jV3yeLYB0f
 
 ## Installation
 - Clone the project locally
